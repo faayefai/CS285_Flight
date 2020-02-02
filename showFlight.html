@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>flight</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+        integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <link rel="stylesheet" href="showFlight.css">
+    <script src="searchFlight.js"></script>
+    <script src="showFlight.js"></script>
+</head>
+
+<body ng-app="myApp">
+    <div class="div-nav container" ng-controller="controller">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" style="background-color: rgb(224, 224, 224, 0.3); color: white;">List
+                    View</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color: white;">Metrix View</a>
+            </li>
+        </ul>
+
+        <div class="frame">
+            <div class="container">
+                <br>
+                <div class="row page">
+                    <div class="col">
+                        <p style="text-align: start;">1 of {{flights.length}} shown - One way </p>
+                    </div>
+                    <div class="col">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container">
+                <div class="card" style="margin-bottom: 20px;" ng-repeat="flight in flights">
+                    <div class="card-body" style="margin: -10px;">
+                        <div class="table-responsive">
+                            <table class="table table-sm borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Price</th>
+                                        <th>Airline</th>
+                                        <th>Take-off</th>
+                                        <th>Landing</th>
+                                        <th style="text-align: right;">Stops(Duration)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-collapse:separate;">
+                                        <td class="font-weight-bold th-body"
+                                            style="font-size: 25px; color: rgb(0, 123, 255);" id="price">
+                                            ${{flight.price}}</td>
+                                        <td>
+                                            <p>{{flight.airline}}</p>
+                                        </td>
+                                        <td><span
+                                                style="font-weight: bold; font-size: 20px;">{{flight.takeOffTime.hourOfDay}}.{{flight.takeOffTime.minute}}</span>
+                                            <p>{{flight.fromAirport.split(' ')[0]}}</p>
+                                        </td>
+                                        <td><span
+                                                style="font-weight: bold; font-size: 20px;">{{flight.landingTime.hourOfDay}}.{{flight.landingTime.minute}}</span>
+                                            <p>{{flight.toAirport.split(' ')[0]}}</p>
+                                        <td style="text-align: right;">{{flight.stopDuration[0]}}h
+                                            {{flight.stopDuration[2]}}{{flight.stopDuration[3]}}m</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="text-align: right; word-spacing: 5px;">
+                                <button class="btn btn-link" data-toggle="collapse"
+                                    data-target="#detail{{$index}}">Detail</button>
+                                <a href="#" class="fas fa-print"></a>
+                                <a href="#" class="fas fa-heart"></a>
+                                <a href="#" class="fas fa-envelope"></a>
+                                <a href="#" class="fas fa-trash-alt"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- when click detail -->
+                    <div id="detail{{$index}}" class="collapse">
+                        <hr>
+                        <div class="card-body">
+                            <p class="font-weight-bold"
+                                style="font-size:20px; color: rgb(0, 123, 255); margin-top: -20px; ">OUTBOUND</p>
+                            <p>{{flight.takeOffTime.day}}/{{flight.takeOffTime.month}}/{{flight.takeOffTime.year}}</p>
+                            <div ng-repeat="transit in flight.transits">
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <!-- <p style="font-weight: bold; font-size: 20px;"><i class="fas fa-plane-departure"></i> &nbsp;{{flight.takeOffTime.hourOfDay}}.{{flight.takeOffTime.minute}} + {{transit.transitHours}}</p> -->
+                                                <p style="font-weight: bold; font-size: 20px;"><i
+                                                        class="fas fa-plane-departure"></i>
+                                                    {{takeOffHour($parent.$index,$index)}}</p>
+                                            </div>
+                                            <div class="col">
+                                                <p style="float: left;">{{fromAirport($parent.$index,$index)}}</p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p style="font-weight: bold; font-size: 20px;"><i
+                                                        class="fas fa-plane-arrival"></i>
+                                                    {{landingHour($parent.$index,$index)}}</p>
+                                            </div>
+                                            <div class="col">
+                                                <p style="float: left;">{{transit.transitCountry}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small class="text-muted">Flight #: {{transit.flightNO}} | aircraft type:
+                                    {{transit.aircraftType}} | operated by: {{transit.airline}} </small>
+                                <br>
+                                <br>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" data-toggle="collapse"
+                                    data-target="#select{{$index}}" ng-click="showPrice($index)">Select</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- when click select -->
+                    <div id="select{{$index}}" class="collapse" style="margin-bottom: 10px;">
+                        <hr>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col col-info rounded">
+                                    <div class="row" style="margin-top: 20px; margin-bottom: 20px;">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Title <span class="red">*</span></label>
+                                                <select class="form-control">
+                                                    <option>Miss</option>
+                                                    <option>Mrs.</option>
+                                                    <option>Ms.</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Firstname <span class="red">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Firstname"
+                                                    ng-model="fName">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Lastname <span class="red">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Lastname">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Birth Date <span class="red">*</span></label>
+                                                <input class="form-control" type="datetime-local">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Passport No. <span class="red">*</span></label>
+                                                <input type="text" class="form-control" placeholder="123456789">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Country <span class="red">*</span></label>
+                                                <select class="form-control">
+                                                    <option>Thailand</option>
+                                                    <option>England</option>
+                                                    <option>Japan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Passport Expiration Date <span class="red">*</span></label>
+                                                <input class="form-control" type="datetime-local">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="text-center" style="margin-top: 10px;">
+                                                <button type="button" class="btn btn-success" data-toggle="collapse" 
+                                                    data-target="#service{{$index}}">Next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 totalBox rounded">
+                                    <p class="font-weight-bold" style="margin-top: 10px; text-align: center;">Payment
+                                        Information</p>
+                                    <p><i class="fas fa-arrow-circle-right" id="flights"></i> Flight
+                                        <span style="margin-left: 50px;">฿{{flightP}}</span></p>
+                                    <p><i class="fas fa-arrow-circle-right"></i> Tax
+                                        <span style="margin-left: 65px;" id="tax" value=1000>฿1000</span></p>
+                                    <p><i class="fas fa-arrow-circle-right"></i> Service
+                                        <span style="margin-left: 36px;" id="service">฿ {{package()}}</span></p>
+                                    <p><i class="fas fa-arrow-circle-right"></i> Discount
+                                        <span style="margin-left: 27px;" id="discount">฿ {{-discount()}}</span></p>
+                                    <hr>
+                                    <p>Total <span
+                                            style="margin-left: 27px; font-weight: bold;">฿{{totalPrice()}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- when click next -->
+                    <div id="service{{$index}}" class="collapse">
+                        <hr>
+                        <p style="font-size: 20px; margin: 20px;"> ประกันภัยระหว่างการเดินทาง</p>
+                        <div class="card" style="margin: 10px">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <label class="form-check-label" style="color: rgb(0, 123, 255);">
+                                                <input type="checkbox" class="form-check-input" ng-model="checkbox1"
+                                                    ng-click="package(checkbox1,'bag')" id="bag"
+                                                    value=350>ประกันกระเป๋าเดินทางหาย หรือ ล่าช้า
+                                            </label>
+                                            <p>(ราคา 350 บาท)</p><br>
+                                            <!-- <a href="#"><span class="red">ดูเพิ่มเติม</span></a> -->
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <img src="image/travel-insurance.jpg" height="200" width="400">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin: 10px">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <label class="form-check-label" style="color:  rgb(0, 123, 255);">
+                                                <input type="checkbox" class="form-check-input" ng-model="checkbox2"
+                                                    ng-click="package(checkbox2,'insure')" id="insure"
+                                                    value=1300>ประกันอุบัติเหตุและสุขภาพระหว่างเดินทาง
+                                            </label>
+                                            <p>(ราคา 1,300 บาท)</p><br>
+                                            <!-- <a href="#"><span class="red">ดูเพิ่มเติม</span></a> -->
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <img src="image/health-insurance.jpg" height="200" width="400">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 20px; margin: 20px;"> บริการเพิ่มเติม</p>
+                        <div class="card" style="margin: 10px">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" ng-model="checkbox3"
+                                                    ng-click="package(checkbox3,'delay')" value=150>
+                                                แจ้งเตือนเครื่องบินเลื่อน (ราคา 150 บาท)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" ng-model="checkbox4"
+                                                    ng-click="package(checkbox4,'sms')" value=300> แจ้งเตือน SMS ก่อนเดินทาง
+                                                (ราคา 300 บาท)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center" style="margin: 10px;">
+                            <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#confirm"
+                                data-target="#confirm{{$index}}">Next </button>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <p class="footer">Book on: <a href="#">${{flight.price}}</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="confirm{{$inde}}" class="collapse c">
+            <div class="container confirm">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-10">
+                            <h3 style="color: rgb(0, 123, 255);">Payment Information</h3>
+                        </div>
+                        <div class="col">
+                            <span class="close" data-toggle="collapse" data-target="#confirm"
+                                style="cursor: pointer;">&times;</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <p>Flight Ticket</p>
+                            <p>Insurance</p>
+                            <p>Service</p>
+                            <p>Tax</p>
+                            <p>Total</p>
+                        </div>
+                        <div class="col">
+                            <p>{{flightP}}</p>
+                            <p>{{insureT}}</p>
+                            <p>{{otherT}}</p>
+                            <p>1000</p>
+                            <p>{{totalPrice()}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row" style="float: right;">
+                        <button type="button" class="btn btn-light" style="margin-right: 15px;" data-toggle="collapse"
+                            data-target="#confirm"> Cancel</button>
+                        <button type="button" class="btn btn-primary">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+</body>
+
+</html>

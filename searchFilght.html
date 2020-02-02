@@ -1,0 +1,117 @@
+<!-- <!DOCTYPE html> -->
+<html>
+    <head>
+        <title>Search Your Flight</title>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+        <!-- necessary scripts for the dialog -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="./searchFlight.js"></script>
+        
+        <style type="text/css">
+            body{
+                /* background-color: 262626; */
+                background-image: url("image/airplane.jpg");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .container{
+                background-color: rgb(255,255,255,0.3);
+            }
+            h1{
+                color:rgb(0, 123, 255);
+            }
+            @media only screen and (max-width: 600px){
+                .container{
+                    background-color: transparent;
+                }
+            }
+        </style>
+    </head>
+    <body ng-app="mainApp">
+        <form action="showFlight.html" method="POST">
+        <div class="container">    
+            <div class="container-fluid">
+                <h1 style="margin-top:30px">FLIGHT</h1><br>
+            </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 order-md-2 order-sm-3 order-3 form-group">
+                    <label for="">Flying Form</label><br><br>
+                    <input id="flyFrom" type="text" class="form-control" placeholder="กรอกชื่อเมืองต้นทาง" oninput="selectFlying()">
+                </div>
+                <div class="col-md-4 order-md-2 order-sm-3 order-3 form-group">
+                    <label for="">Flying To</label><br><br>
+                    <input id="flyTo" type="text" class="form-control" placeholder="กรอกชื่อเมืองปลายทาง" oninput="selectFlying()">
+                </div>
+                <div class="col-md-2 order-md-3 order-sm-1 order-1 form-group">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="materialUnchecked" id="tripes" name="trips" value="One way">
+                        <label class="form-check-label" for="materialUnchecked">One Way</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="materialUnchecked" id="tripes" name="trips" value="Round Trip">
+                        <label class="form-check-label" for="materialUnchecked">Round Trip</label>
+                    </div>
+                </div> 
+            </div>                 
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label for="">Departing</label><br><br>
+                <select class="form-control" id="departing" name="dept" value="dept">
+                    <option id="BKK">Suvarnabumi (BKK)</option>
+                    <option id="LHR">London Heathrow (LHR)</option>
+                    <!-- <option id="CDG">Charles de Gaulle (CDG)</option> -->
+                    </select> 
+                </div>
+                <div class="col-md-4 form-group">
+                <label for="returning">Returning</label><br><br>
+                    <select class="form-control" id="returning" name="ret" value="ret">
+                    <option id="BKK">Suvarnabumi (BKK)</option>
+                    <option id="LHR">London Heathrow (LHR)</option>
+                    <!-- <option id="CDG">Charles de Gaulle (CDG)</option> -->
+                    </select> 
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label for="">Adults</label><br>
+                    <select class="form-control" id="adult">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    </select> 
+                </div>
+            
+                <div class="col-md-4 form-group">
+                    <label for="">Cabin</label><br>
+                    <select class="form-control"  id="cabin">
+                    <option>ECONOMY CLASS</option>
+                    <option>BUSSINESS CLASS</option>
+                    <option>FIRST CLASS</option>
+                    </select> 
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8 form-group" >
+                    <button type="submit" class="btn btn-primary btn-block">SEARCH</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+    </body>
+</html>
